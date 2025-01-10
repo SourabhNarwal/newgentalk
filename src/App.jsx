@@ -20,8 +20,8 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/newgentalk/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/newgentalk" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signup/verification" element={<Otpverify />} />
         <Route path="/chatroom" element={<ChatRoom />} />
