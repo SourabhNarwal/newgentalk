@@ -149,7 +149,7 @@ const Chatroom = () => {
 
     });
 
-    localStream.getTracks().forEach((track) => {
+    localVideoRef.current.srcObject.getTracks().forEach((track) => {
       peerConnection.current.addTrack(track, localStream);
     });
 
