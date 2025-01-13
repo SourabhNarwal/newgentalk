@@ -32,7 +32,7 @@ let iceServers = [
 ]
 iceServers[0].urls = "stun:stun.l.google.com:19302";
 const maxcalltime = 5;
-const SERVER_URL = 'wss://84e1-2409-40d6-100e-b57f-a465-8065-401d-9c17.ngrok-free.app';
+const SERVER_URL = 'wss://67cc-112-196-126-3.ngrok-free.app';
 
 // (async () => {
 //   const response = await axios.get(`https://newgentalk.metered.live/api/v1/turn/credentials?apiKey=${API_KEY}`);
