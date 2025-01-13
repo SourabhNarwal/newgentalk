@@ -135,7 +135,9 @@ const Chatroom = () => {
       const stream = await navigator.mediaDevices.getUserMedia(constraints); 
       localVideoRef.current = stream;
       setLocalStream(stream);
-      console.log('localStream from getmedia:', localStream);
+      if(localStream) {
+         console.log('localStream from getmedia:', localStream);
+      }
       setStatus("Ready to connect");
     } catch (err) {
       console.error('Error accessing media devices.', err);
