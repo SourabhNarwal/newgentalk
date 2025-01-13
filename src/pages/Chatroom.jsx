@@ -138,6 +138,9 @@ const Chatroom = () => {
       if(localStream) {
          console.log('localStream from getmedia:', localStream);
       }
+      else {
+        console.log('localStream not get from getmedia:', localStream);
+      }
       setStatus("Ready to connect");
     } catch (err) {
       console.error('Error accessing media devices.', err);
