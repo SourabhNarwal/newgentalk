@@ -149,9 +149,15 @@ const Chatroom = () => {
 
     });
 
-    localVideoRef.current.srcObject.getTracks().forEach((track) => {
-      peerConnection.current.addTrack(track, localStream);
-    });
+    if (localStream) {
+        console.log('localStream:', localStream);
+        localStream.getTracks().forEach((track) => {
+        peerConnection.current.addTrack(track, localStream);
+      });
+    } else {
+      console.error("Local stream is not initialized.");
+      console.log('localStream:', localStream);
+    }
 
     peerConnection.current.ontrack = (event) => {
       setRemoteStream(event.streams[0]);
