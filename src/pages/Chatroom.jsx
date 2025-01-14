@@ -156,6 +156,9 @@ const Chatroom = () => {
         console.warn("No audio tracks found.");
       }
       localVideoRef.current = stream;
+      if(localVideoRef.current){
+        console.log("localVideoRef.current:",localVideoRef.current);
+      }
       setLocalStream(stream);
 
       setStatus("Ready to connect");
