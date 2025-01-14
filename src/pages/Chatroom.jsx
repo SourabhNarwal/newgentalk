@@ -32,7 +32,7 @@ let iceServers = [
 ]
 iceServers[0].urls = "stun:stun.l.google.com:19302";
 const maxcalltime = 5;
-const SERVER_URL = 'wss://67cc-112-196-126-3.ngrok-free.app';
+const SERVER_URL = 'wss://6062-117-203-246-41.ngrok-free.app';
 
 // (async () => {
 //   const response = await axios.get(`https://newgentalk.metered.live/api/v1/turn/credentials?apiKey=${API_KEY}`);
@@ -98,7 +98,7 @@ const Chatroom = () => {
       }
     };
 
-    
+
 
     return () => {
       socket.current.close();
@@ -113,30 +113,51 @@ const Chatroom = () => {
 
   }, []);
 
+  // const constraints = {
+  //   video: {
+  //     width: { max: 640 },   // Max width for 480p
+  //     height: { max: 480 },  // Max height for 480p
+  //     frameRate: { max: 15 }, // Lower frame rate to save bandwidth
+  //     // bitrate: { max: 500000 } // Approx. 500 kbps for 480p
+  //   },
+  //   audio: {
+  //     sampleRate: 16000,       // Lower audio sample rate
+  //     channelCount: 1,         // Mono audio
+  //     //bitrate: 32000,          // Audio bitrate (32 kbps)
+  //     echoCancellation: true,  // Enable echo cancellation
+  //     noiseSuppression: true,   // Reduce background noise
+  //     autogainControl: true,    // Adjust mic levels automatically
+  //   }
+  // };
   const constraints = {
-    video: {
-      width: { max: 640 },   // Max width for 480p
-      height: { max: 480 },  // Max height for 480p
-      frameRate: { max: 15 }, // Lower frame rate to save bandwidth
-      // bitrate: { max: 500000 } // Approx. 500 kbps for 480p
-    },
-    audio: {
-      sampleRate: 16000,       // Lower audio sample rate
-      channelCount: 1,         // Mono audio
-      //bitrate: 32000,          // Audio bitrate (32 kbps)
-      echoCancellation: true,  // Enable echo cancellation
-      noiseSuppression: true,   // Reduce background noise
-      autogainControl: true,    // Adjust mic levels automatically
-    }
+    video: true,
+    audio: true,
   };
 
   const getMedia = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints); 
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       console.log("Stream obtained from getUserMedia:", stream);
+      const tracks = stream.getTracks();
+      console.log("All tracks:", tracks);
+      tracks.forEach((track) => {
+        console.log("Track kind:", track.kind);
+      });
+      const videoTracks = stream.getVideoTracks();
+      const audioTracks = stream.getAudioTracks();
+
+      console.log("Video Tracks:", videoTracks);
+      console.log("Audio Tracks:", audioTracks);
+
+      if (videoTracks.length === 0) {
+        console.warn("No video tracks found.");
+      }
+      if (audioTracks.length === 0) {
+        console.warn("No audio tracks found.");
+      }
       localVideoRef.current = stream;
       setLocalStream(stream);
-     
+
       setStatus("Ready to connect");
     } catch (err) {
       console.error('Error accessing media devices.', err);
@@ -152,8 +173,8 @@ const Chatroom = () => {
     });
 
     if (localStream) {
-        console.log('localStream:', localStream);
-        localStream.getTracks().forEach((track) => {
+      console.log('localStream:', localStream);
+      localStream.getTracks().forEach((track) => {
         peerConnection.current.addTrack(track, localStream);
       });
     } else {
