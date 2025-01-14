@@ -171,12 +171,12 @@ const Chatroom = () => {
 
     peerConnection.current = new RTCPeerConnection({
       iceServers,
-      //bundlePolicy: "max-bundle",
+      bundlePolicy: "max-bundle",
 
     });
 
     if (localVideoRef.current) {
-      console.log('localStream:', localVideoRef.current);
+      console.log('localStream:', localStream);
       localVideoRef.current.getTracks().forEach((track) => {
         peerConnection.current.addTrack(track, localVideoRef.current);
       });
