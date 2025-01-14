@@ -186,8 +186,10 @@ const Chatroom = () => {
     }
 
     peerConnection.current.ontrack = (event) => {
+      console.log("Remote track received:", event.streams);
+      remoteVideoRef.current = event.streams[0];
       setRemoteStream(event.streams[0]);
-      remoteVideoRef.current.srcObject = event.streams[0];
+      
       startCallTimers();
       monitorConnection();
       optimizeBandwidth();
