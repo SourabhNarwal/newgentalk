@@ -171,14 +171,14 @@ const Chatroom = () => {
 
     peerConnection.current = new RTCPeerConnection({
       iceServers,
-      bundlePolicy: "max-bundle",
+      //bundlePolicy: "max-bundle",
 
     });
 
-    if (localStream) {
-      console.log('localStream:', localStream);
-      localStream.getTracks().forEach((track) => {
-        peerConnection.current.addTrack(track, localStream);
+    if (localVideoRef.current) {
+      console.log('localStream:', localVideoRef.current);
+      localVideoRef.current.getTracks().forEach((track) => {
+        peerConnection.current.addTrack(track, localVideoRef.current);
       });
     } else {
       console.error("Local stream is not initialized.");
