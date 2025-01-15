@@ -113,26 +113,23 @@ const Chatroom = () => {
 
   }, []);
 
-  // const constraints = {
-  //   video: {
-  //     width: { max: 640 },   // Max width for 480p
-  //     height: { max: 480 },  // Max height for 480p
-  //     frameRate: { max: 15 }, // Lower frame rate to save bandwidth
-  //     // bitrate: { max: 500000 } // Approx. 500 kbps for 480p
-  //   },
-  //   audio: {
-  //     sampleRate: 16000,       // Lower audio sample rate
-  //     channelCount: 1,         // Mono audio
-  //     //bitrate: 32000,          // Audio bitrate (32 kbps)
-  //     echoCancellation: true,  // Enable echo cancellation
-  //     noiseSuppression: true,   // Reduce background noise
-  //     autogainControl: true,    // Adjust mic levels automatically
-  //   }
-  // };
   const constraints = {
-    video: true,
-    audio: true,
+    video: {
+      width: { max: 640 },   // Max width for 480p
+      height: { max: 480 },  // Max height for 480p
+      frameRate: { max: 15 }, // Lower frame rate to save bandwidth
+      // bitrate: { max: 500000 } // Approx. 500 kbps for 480p
+    },
+    audio: {
+      sampleRate: 16000,       // Lower audio sample rate
+      channelCount: 1,         // Mono audio
+      //bitrate: 32000,          // Audio bitrate (32 kbps)
+      echoCancellation: true,  // Enable echo cancellation
+      noiseSuppression: true,   // Reduce background noise
+      autogainControl: true,    // Adjust mic levels automatically
+    }
   };
+
 
   const getMedia = async () => {
     try {
