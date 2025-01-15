@@ -190,6 +190,7 @@ const Chatroom = () => {
       startCallTimers();
       monitorConnection();
       optimizeBandwidth();
+      setStatus("Connected");
     };
 
     peerConnection.current.onicecandidate = ({ candidate }) => {
