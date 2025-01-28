@@ -8,7 +8,7 @@ import Otpverify from './pages/Otpverify';
 import Home from './pages/Home';
 import NewPassword from './pages/forgetpassword/NewPassword';
 
-const server="https://fabc-112-196-126-3.ngrok-free.app/";
+const server="https://fabc-112-196-126-3.ngrok-free.app";
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
