@@ -31,22 +31,27 @@ let iceServers = [
   },
 ]
 iceServers[0].urls = "stun:stun.l.google.com:19302";
-const maxcalltime = 5;
-const SERVER_URL = 'wss://2efa-117-203-246-41.ngrok-free.app';
+const maxcalltime = 2;
+//const SERVER_URL = 'wss://2efa-117-203-246-41.ngrok-free.app';
+const SERVER_URL = `wss://fabc-112-196-126-3.ngrok-free.app`;//https://fabc-112-196-126-3.ngrok-free.app/
 
-// (async () => {
-//   const response = await axios.get(`https://newgentalk.metered.live/api/v1/turn/credentials?apiKey=${API_KEY}`);
-//   iceServers = response.data;
-//   iceServers[0].urls = "stun:stun.l.google.com:19302";
-//   // console.log(iceServers);
-// })();
-
-const Chatroom = () => {
+const Chatroom = ({server}) => {
 
   const navigate = useNavigate();
-  const handleLogout = () => {
-    console.log("Logout Clicked");
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/logout', {}, {
+        withCredentials: true, // Ensures cookies are sent with the request
+      });
+  
+      if (response.status === 200) {
+        console.log('Logout successful');
+        // Redirect to login page or clear application state
+        navigate("/newgentalk/login");
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   }
 
   const [localStream, setLocalStream] = useState(null);
@@ -66,7 +71,28 @@ const Chatroom = () => {
 
   useEffect(() => {
     // Request user media on load
+   
+    axios.get(`${server}/chatroom`, { withCredentials: true })
+      .then(response => {
+        if (response.data.success) {
+          console.log("");
+        }
+      })
+      .catch(error => {
+        if (error.response.status === 401) {
+          console.log("Unauthorized access. Redirecting to login page.");
+          navigate("/newgentalk/login");
+        }
+        else if (error.response.status === 403) {
+          navigate("/newgentalk/login");
+        }
+        else {
+          console.error("Error accessing chatroom:", error);
+          return;
+        }
+      });
     getMedia();
+
     socket.current = new WebSocket(SERVER_URL);
 
     socket.current.onmessage = (event) => {
@@ -92,6 +118,9 @@ const Chatroom = () => {
           break;
         case 'peer-disconnected':
           handlePeerDisconnected();
+          break;
+        case 'error':
+          handleErrorMessage(data.payload);
           break;
         default:
           console.log(`Unknown message type: ${data.type}`);
@@ -134,17 +163,17 @@ const Chatroom = () => {
   const getMedia = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      console.log("Stream obtained from getUserMedia:", stream);
+      //console.log("Stream obtained from getUserMedia:", stream);
       const tracks = stream.getTracks();
-      console.log("All tracks:", tracks);
-      tracks.forEach((track) => {
-        console.log("Track kind:", track.kind);
-      });
+      //console.log("All tracks:", tracks);
+      // tracks.forEach((track) => {
+      //   console.log("Track kind:", track.kind);
+      // });
       const videoTracks = stream.getVideoTracks();
       const audioTracks = stream.getAudioTracks();
 
-      console.log("Video Tracks:", videoTracks);
-      console.log("Audio Tracks:", audioTracks);
+      //console.log("Video Tracks:", videoTracks);
+      //console.log("Audio Tracks:", audioTracks);
 
       if (videoTracks.length === 0) {
         console.warn("No video tracks found.");
@@ -153,8 +182,8 @@ const Chatroom = () => {
         console.warn("No audio tracks found.");
       }
       localVideoRef.current = stream;
-      if(localVideoRef.current){
-        console.log("localVideoRef.current:",localVideoRef.current);
+      if (localVideoRef.current) {
+        console.log("localVideoRef.current:", localVideoRef.current);
       }
       setLocalStream(stream);
 
@@ -173,20 +202,18 @@ const Chatroom = () => {
     });
 
     if (localVideoRef.current) {
-      console.log('localStream:', localStream);
       localVideoRef.current.getTracks().forEach((track) => {
         peerConnection.current.addTrack(track, localVideoRef.current);
       });
     } else {
       console.error("Local stream is not initialized.");
-      console.log('localStream:', localStream);
     }
 
     peerConnection.current.ontrack = (event) => {
       console.log("Remote track received:", event.streams);
       remoteVideoRef.current = event.streams[0];
       setRemoteStream(event.streams[0]);
-      
+
       startCallTimers();
       monitorConnection();
       optimizeBandwidth();
@@ -243,10 +270,15 @@ const Chatroom = () => {
     setStatus("Peer disconnected.");
     stopConnection();
   };
+  const handleErrorMessage = (message) => {
+    setStatus(message);
+    stopConnection();
+  };
   const connectToRoom = () => {
     socket.current.send(
       JSON.stringify({
         type: 'join',
+        //token: token,
       })
     );
     setIsConnected(true);
@@ -353,7 +385,7 @@ const Chatroom = () => {
     // Disconnect call at 25 minutes
     callTimerRef.current = setTimeout(() => {
       stopConnection();
-      setStatus('Call automatically disconnected after 25 minutes.');
+      setStatus(`Call automatically disconnected after ${maxcalltime} minutes.`);
     }, (maxcalltime) * 60 * 1000); // 25 minutes
   };
 
@@ -380,7 +412,7 @@ const Chatroom = () => {
       {/* Header */}
       <header className="flex items-center justify-between p-4 justify-evenly bg-white bg-opacity-90 shadow-md">
         <h1 className="text-3xl font-extrabold text-purple-700">newGentalk...</h1>
-        <h2>local peerid:{localPeerId}</h2>
+
         <button
           onClick={() => handleLogout()}
           className="px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-pink-500 to-purple-700 rounded-lg hover:from-purple-700 hover:to-pink-500 focus:outline-none focus:ring focus:ring-pink-300"
@@ -396,8 +428,6 @@ const Chatroom = () => {
             Call will disconnect in 1 minute. Wrap up your conversation!
           </div>
         )}
-
-        <h2>local peerid:{localPeerId}</h2>
         <div className=" mt-6 flex space-x-4">
           <button
             onClick={connectToRoom}
@@ -406,7 +436,7 @@ const Chatroom = () => {
             rounded-lg hover:from-blue-500 hover:to-green-500 focus:outline-none focus:ring focus:ring-purple-300"
             transition-opacity duration-300 ease-in-out ${isConnected ? 'opacity-50 cursor-not-allowed' : 'opacity-100 cursor-pointer'}`
             }>
-            Next
+            Search
           </button>
           <button
             onClick={handleStopbtn}
@@ -466,24 +496,6 @@ const Chatroom = () => {
           </div>
 
         </div>
-
-        {/* Buttons Section */}
-        {/* <div className="mt-6 flex space-x-4">
-          <button
-            onClick={searchForPeer}
-            disabled={isSearching}
-            className="px-6 py-3 text-lg font-bold text-white bg-gradient-to-r from-green-500 to-blue-500 
-            rounded-lg hover:from-blue-500 hover:to-green-500 focus:outline-none focus:ring focus:ring-purple-300"
-          >
-            Next
-          </button>
-          <button
-            onClick={stopConnection}
-            className="px-6 py-3 text-lg font-bold text-white bg-gradient-to-r from-orange-500 to-red-500 rounded-lg hover:from-red-500 hover:to-orange-500 focus:outline-none focus:ring focus:ring-violet-300"
-          >
-            Stop
-          </button>
-        </div> */}
       </main>
     </div>
   )

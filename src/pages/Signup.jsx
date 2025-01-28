@@ -1,21 +1,50 @@
+import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
-const Signup = () => {
+const Signup = ({server}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [gender, setGender] = useState("");
-  //const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+
     e.preventDefault();
-    // Handle login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
-    navigate('/signup/verification');
+  
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setSuccess(""); // Clear any success messages
+      return;
+    }
+
+    try {
+      // Sending data to the server
+      const response = await axios.post(`${server}/signup`, {
+        email,
+        password,
+        gender,
+      });
+
+      // Handle server response
+      if (response.data.success) {
+        setSuccess("Signup successful! Redirecting to verification...");
+        setError(""); // Clear any error messages
+        setTimeout(() => navigate('/newgentalk/verification',{ state: { email } }), 2000); // Redirect after success
+      } else {
+        setError(response.data.message || "An error occurred during signup.");
+        setSuccess(""); // Clear any success messages
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Server error. Please try again.");
+      setSuccess(""); // Clear any success messages
+    }
   };
+
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500">
         {/* Background Text */}
@@ -32,9 +61,9 @@ const Signup = () => {
         <p className="text-center text-sm text-gray-600">
           <span className='font-bold '>create to join Real Democratic Conversations...</span>
        </p>
-        {success && (
-          <p className="text-sm text-green-600 text-center">{success}</p>
-        )}
+        {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+        {success && <p className="text-sm text-green-600 text-center">{success}</p>}
+
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email */}
@@ -121,7 +150,7 @@ const Signup = () => {
         <p className="text-sm text-gray-600">
           Do you have an account?{" "}
          
-          <Link to="/" className="font-bold text-blue-600 hover:underline">
+          <Link to="/newgentalk/login" className="font-bold text-blue-600 hover:underline">
           Login
           </Link>
         </p>

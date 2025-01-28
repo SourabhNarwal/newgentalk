@@ -22,7 +22,7 @@ const LoadingSpin = () => {
     };
     return (
         <div style={loadingSplashStyle}>
-            <div style={spinnerStyle} />
+            <div />
             <p style={textStyle}>Loading, please wait...</p>
         </div>
     );
