@@ -25,13 +25,13 @@ const Home = () => {
         {/* Buttons */}
         <div className="space-y-4">
           <button
-            onClick={() => navigate('/newgentalk/login')}
+            onClick={() => navigate('/login')}
             className="w-full px-4 py-2 text-lg font-bold text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded hover:from-purple-600 hover:to-blue-500 focus:outline-none focus:ring focus:ring-purple-300"
           >
             Login
           </button>
           <button
-            onClick={() => navigate('/newgentalk/signup')}
+            onClick={() => navigate('/signup')}
             className="w-full px-4 py-2 text-lg font-bold text-white bg-gradient-to-r from-purple-600 to-blue-500 rounded hover:from-blue-500 hover:to-purple-600 focus:outline-none focus:ring focus:ring-blue-300"
           >
             Sign Up

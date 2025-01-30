@@ -24,7 +24,7 @@ const Login = ({server}) => {
       // If login is successful, redirect to chatroom
       if (response.status === 200) {
         //console.log("Login successful:", response.data);
-        navigate('/newgentalk/chatroom');
+        navigate('/chatroom');
       }
     } catch (err) {
       // Handle different server responses
@@ -47,7 +47,7 @@ const Login = ({server}) => {
         if (err.response.data.message === "Email not verified") {
           //setInfo("Your email is not verified. A verification email with an OTP has been sent. Please check your inbox.");
           // Optionally, navigate to a verification page
-          navigate('/newgentalk/verification', { state: { email } });
+          navigate('/verification', { state: { email } });
         }
       } else {
         console.error("error", err.response);
@@ -117,7 +117,7 @@ const Login = ({server}) => {
               placeholder="Enter your password"
               required
             />
-            <Link to="/newgentalk/forgot-pass" className="font-bold text-blue-600 hover:underline">
+            <Link to="/forgot-pass" className="font-bold text-blue-600 hover:underline">
               forgot password?
             </Link>
           </div>
@@ -134,7 +134,7 @@ const Login = ({server}) => {
           <p className="text-sm text-gray-600">
             Don't have an account?{" "}
 
-            <Link to="/newgentalk/signup" className="font-bold text-blue-600 hover:underline">
+            <Link to="/signup" className="font-bold text-blue-600 hover:underline">
               Sign up
             </Link>
           </p>

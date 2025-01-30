@@ -33,7 +33,7 @@ const Signup = ({server}) => {
       if (response.status===200) {
         setSuccess("Signup successful! Redirecting to verification...");
         setError(""); // Clear any error messages
-        setTimeout(() => navigate('/newgentalk/verification',{ state: { email } }), 2000); // Redirect after success
+        setTimeout(() => navigate('/verification',{ state: { email } }), 2000); // Redirect after success
       } else {
         setError(response.data.message || "An error occurred during signup.");
         setSuccess(""); // Clear any success messages
@@ -149,7 +149,7 @@ const Signup = ({server}) => {
         <p className="text-sm text-gray-600">
           Do you have an account?{" "}
          
-          <Link to="/newgentalk/login" className="font-bold text-blue-600 hover:underline">
+          <Link to="/login" className="font-bold text-blue-600 hover:underline">
           Login
           </Link>
         </p>

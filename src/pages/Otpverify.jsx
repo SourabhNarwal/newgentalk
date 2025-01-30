@@ -42,7 +42,7 @@ const Otpverify = ({server}) => {
         if (response.status === 200) {
           setInfo('OTP verified successfully! Redirecting to chatroom...');
           setTimeout(() => {
-            navigate('/newgentalk/chatroom');
+            navigate('/chatroom');
           }, 2000);
         }
       } catch (err) {
@@ -143,7 +143,7 @@ const Otpverify = ({server}) => {
           <div className="text-center">
         <p className="text-sm text-gray-600">
           Go to {" "}
-          <Link to="/newgentalk/" className="font-bold text-blue-600 hover:underline">
+          <Link to="/" className="font-bold text-blue-600 hover:underline">
           Home Page
           </Link>
         </p>

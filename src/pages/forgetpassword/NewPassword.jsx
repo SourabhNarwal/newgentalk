@@ -26,7 +26,7 @@ const NewPassword = ({server}) => {
                
                 setInfo("A verification email has been sent. Please check your inbox.");
                 setTimeout(() => {
-                    navigate('/newgentalk/verification', { state: { email } });
+                    navigate('/verification', { state: { email } });
                 }, 3000);
             }
         } catch (err) {
@@ -121,7 +121,7 @@ const NewPassword = ({server}) => {
                 <div className="text-center">
                     <p className="text-sm text-gray-600">
                         Go to {" "}
-                        <Link to="/newgentalk" className="font-bold text-blue-600 hover:underline">
+                        <Link to="/" className="font-bold text-blue-600 hover:underline">
                             Home Page
                         </Link>
                     </p>

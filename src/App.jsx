@@ -24,12 +24,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/newgentalk" element={<Home server={server}/>} />
-        <Route path="/newgentalk/login" element={<Login server={server} />} />
-        <Route path="/newgentalk/signup" element={<Signup server={server} />} />
-        <Route path='/newgentalk/forgot-pass' element={<NewPassword  server={server} />} />
-        <Route path="/newgentalk/verification" element={<Otpverify server={server} />} />
-        <Route path="/newgentalk/chatroom" element={<ChatRoom server={server} />} />
+        <Route path="/" element={<Home server={server}/>} />
+        <Route path="/login" element={<Login server={server} />} />
+        <Route path="/signup" element={<Signup server={server} />} />
+        <Route path='/forgot-pass' element={<NewPassword  server={server} />} />
+        <Route path="/verification" element={<Otpverify server={server} />} />
+        <Route path="/chatroom" element={<ChatRoom server={server} />} />
         <Route path="*" element={<Error/>} />
       </Routes>
     </Router>

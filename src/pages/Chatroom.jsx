@@ -40,7 +40,7 @@ const Chatroom = ({server}) => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/logout', {}, {
+      const response = await axios.post(`${server}/logout`, {}, {
         withCredentials: true, // Ensures cookies are sent with the request
       });
   
@@ -54,7 +54,7 @@ const Chatroom = ({server}) => {
         }
        // console.log('Logout successful');
         // Redirect to login page or clear application state
-        navigate("/newgentalk/login");
+        navigate("/login");
       }
     } catch (error) {
       console.error('Error during logout:', error);
@@ -87,10 +87,10 @@ const Chatroom = ({server}) => {
       .catch(error => {
         if (error.response.status === 401) {
           console.error("Unauthorized access. Redirecting to login page.");
-          navigate("/newgentalk/login");
+          navigate("/login");
         }
         else if (error.response.status === 403) {
-          navigate("/newgentalk/login");
+          navigate("/login");
         }
         else {
           console.error("Error accessing chatroom:", error);
