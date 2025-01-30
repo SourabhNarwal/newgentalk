@@ -23,7 +23,7 @@ const Login = ({server}) => {
 
       // If login is successful, redirect to chatroom
       if (response.status === 200) {
-        console.log("Login successful:", response.data);
+        //console.log("Login successful:", response.data);
         navigate('/newgentalk/chatroom');
       }
     } catch (err) {
@@ -50,7 +50,7 @@ const Login = ({server}) => {
           navigate('/newgentalk/verification', { state: { email } });
         }
       } else {
-        console.log("error", err.response);
+        console.error("error", err.response);
         setError("An unexpected error occurred. Please try again later.");
       }
     }

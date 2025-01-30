@@ -28,9 +28,9 @@ const Signup = ({server}) => {
         password,
         gender,
       });
-
+      console.log(response);
       // Handle server response
-      if (response.data.success) {
+      if (response.status===200) {
         setSuccess("Signup successful! Redirecting to verification...");
         setError(""); // Clear any error messages
         setTimeout(() => navigate('/newgentalk/verification',{ state: { email } }), 2000); // Redirect after success
@@ -57,7 +57,7 @@ const Signup = ({server}) => {
         <h2 className="text-3xl font-bold text-center text-blue-700">
           Create an Account
         </h2>
-        <h4 className="text-xl font-bold text-center text-yellow-500" >Only for college students</h4>
+        <h4 className="text-xl font-bold text-center text-yellow-500" >Only for Maniacs</h4>
         <p className="text-center text-sm text-gray-600">
           <span className='font-bold '>create to join Real Democratic Conversations...</span>
        </p>
@@ -72,8 +72,7 @@ const Signup = ({server}) => {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Email Address <span className='text-sm text-gray-600 font-bold text-red-500'>
-                (*Only student college email is valid)</span>
+              Email Address
             </label>
             <input
               type="email"

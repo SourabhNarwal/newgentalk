@@ -19,7 +19,7 @@ const Home = () => {
           Welcome to newGentalk!
         </h1>
         <p className="text-sm text-gray-600">
-          Join the platform for real democratic conversations exclusively for college students.
+          Join the platform for real democratic conversations!!!
         </p>
 
         {/* Buttons */}

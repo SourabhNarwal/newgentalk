@@ -121,7 +121,7 @@ const NewPassword = ({server}) => {
                 <div className="text-center">
                     <p className="text-sm text-gray-600">
                         Go to {" "}
-                        <Link to="/newgentalk/" className="font-bold text-blue-600 hover:underline">
+                        <Link to="/newgentalk" className="font-bold text-blue-600 hover:underline">
                             Home Page
                         </Link>
                     </p>

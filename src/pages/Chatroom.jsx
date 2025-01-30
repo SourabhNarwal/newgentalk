@@ -33,7 +33,7 @@ let iceServers = [
 iceServers[0].urls = "stun:stun.l.google.com:19302";
 const maxcalltime = 2;
 //const SERVER_URL = 'wss://2efa-117-203-246-41.ngrok-free.app';
-const SERVER_URL = `wss://fabc-112-196-126-3.ngrok-free.app`;//https://fabc-112-196-126-3.ngrok-free.app/
+const SERVER_URL = import.meta.env.VITE_WS_URL;
 
 const Chatroom = ({server}) => {
 
@@ -45,7 +45,14 @@ const Chatroom = ({server}) => {
       });
   
       if (response.status === 200) {
-        console.log('Logout successful');
+        socket.current.close();
+        if (peerConnection.current) {
+          peerConnection.current.close();
+        }
+        if (localVideoRef.current) {
+          localVideoRef.current.getTracks().forEach((track) => track.stop());
+        }
+       // console.log('Logout successful');
         // Redirect to login page or clear application state
         navigate("/newgentalk/login");
       }
@@ -58,7 +65,6 @@ const Chatroom = ({server}) => {
   const [remoteStream, setRemoteStream] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [status, setStatus] = useState("Initializing...");
-  const [localPeerId, setLocalPeerId] = useState('');
   const [showWarning, setShowWarning] = useState(false);
 
   const localVideoRef = useRef(null);
@@ -74,13 +80,13 @@ const Chatroom = ({server}) => {
    
     axios.get(`${server}/chatroom`, { withCredentials: true })
       .then(response => {
-        if (response.data.success) {
+        if (response.status === 200) {
           console.log("");
         }
       })
       .catch(error => {
         if (error.response.status === 401) {
-          console.log("Unauthorized access. Redirecting to login page.");
+          console.error("Unauthorized access. Redirecting to login page.");
           navigate("/newgentalk/login");
         }
         else if (error.response.status === 403) {
@@ -123,7 +129,7 @@ const Chatroom = ({server}) => {
           handleErrorMessage(data.payload);
           break;
         default:
-          console.log(`Unknown message type: ${data.type}`);
+          console.error(`Unknown message type: ${data.type}`);
       }
     };
 
@@ -182,9 +188,6 @@ const Chatroom = ({server}) => {
         console.warn("No audio tracks found.");
       }
       localVideoRef.current = stream;
-      if (localVideoRef.current) {
-        console.log("localVideoRef.current:", localVideoRef.current);
-      }
       setLocalStream(stream);
 
       setStatus("Ready to connect");
@@ -210,7 +213,7 @@ const Chatroom = ({server}) => {
     }
 
     peerConnection.current.ontrack = (event) => {
-      console.log("Remote track received:", event.streams);
+      //console.log("Remote track received:", event.streams);
       remoteVideoRef.current = event.streams[0];
       setRemoteStream(event.streams[0]);
 
@@ -393,9 +396,12 @@ const Chatroom = ({server}) => {
 
     if (warningTimerRef.current) {
       clearTimeout(warningTimerRef.current);
+      warningTimerRef.current = null;
+      setShowWarning(false);
     }
     if (callTimerRef.current) {
       clearTimeout(callTimerRef.current);
+      callTimerRef.current = null;
     }
     setShowWarning(false);
     setRemoteStream(null);

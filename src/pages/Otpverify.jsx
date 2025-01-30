@@ -36,9 +36,8 @@ const Otpverify = ({server}) => {
   
       try {
         const response = await axios.post(`${server}/verify-otp`, {
-          email,
-          otp,
-        });
+          email,otp,},{ withCredentials: true }
+        );
   
         if (response.status === 200) {
           setInfo('OTP verified successfully! Redirecting to chatroom...');
@@ -63,7 +62,7 @@ const Otpverify = ({server}) => {
   
       try {
         const response = await axios.post(`${server}/resend-otp`, { email });
-        if (response.data.success) {
+        if (response.status === 200) {
           setInfo('OTP has been resent successfully. Please check your email.');
         }
       } catch (err) {

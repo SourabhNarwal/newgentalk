@@ -7,8 +7,9 @@ import { useEffect, useState } from 'react';
 import Otpverify from './pages/Otpverify';
 import Home from './pages/Home';
 import NewPassword from './pages/forgetpassword/NewPassword';
+import Error from './pages/Error';
 
-const server="https://fabc-112-196-126-3.ngrok-free.app";
+const server= import.meta.env.VITE_SERVER_URL || "http://localhost:8000" //"https://fabc-112-196-126-3.ngrok-free.app";
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -23,12 +24,13 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/newgentalk/" element={<Home server={server}/>} />
+        <Route path="/newgentalk" element={<Home server={server}/>} />
         <Route path="/newgentalk/login" element={<Login server={server} />} />
         <Route path="/newgentalk/signup" element={<Signup server={server} />} />
         <Route path='/newgentalk/forgot-pass' element={<NewPassword  server={server} />} />
         <Route path="/newgentalk/verification" element={<Otpverify server={server} />} />
         <Route path="/newgentalk/chatroom" element={<ChatRoom server={server} />} />
+        <Route path="*" element={<Error/>} />
       </Routes>
     </Router>
   );
